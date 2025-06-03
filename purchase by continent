@@ -1,0 +1,25 @@
+SELECT
+ sp.continent,
+ sum (p.price) AS revenue,
+ SUM(CASE
+     WHEN sp.device = 'mobile'THEN p.price
+ END
+   ) / sum (p.price) * 100 AS revenue_from_mobile_percent
+FROM
+ `data-analytics-mate.DA.order` o
+JOIN
+ `data-analytics-mate.DA.session` s
+ON
+ o.ga_session_id = s.ga_session_id
+JOIN
+ `data-analytics-mate.DA.product` p
+ON
+ o.item_id = p.item_id
+JOIN
+ `data-analytics-mate.DA.session_params` sp
+ON
+ s.ga_session_id = sp.ga_session_id
+GROUP BY
+ continent
+ORDER BY
+ revenue DESC;
